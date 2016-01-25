@@ -1,0 +1,14 @@
+apply plugin: "groovy"
+apply plugin: "maven"
+
+group = "com.jdbernard"
+version = "1.0"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+}
