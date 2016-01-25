@@ -8,7 +8,7 @@ package com.jdbernard.util
  * counter is 1-based because the current step is complete for this counter.
  * @author Jonathan Bernard (jdbernard@gmail.com)
  */
-class ConsoleProgressBar {
+public class ConsoleProgressBar {
   int MAX_STEP = 30
 
   long max = 10
@@ -21,7 +21,7 @@ class ConsoleProgressBar {
   public void setMax(long max) {
     this.max = Math.max(max, 1) }
 
-  void update(long value, String info) {
+  public void update(long value, String info) {
     if (value == 0 || startTime == 0)
         startTime = System.currentTimeMillis()
 
@@ -60,7 +60,7 @@ class ConsoleProgressBar {
     out.flush()
   }
 
-  void erase() {
+  public void erase() {
       out.print '\b' * lastLinePrinted.length()
       out.print ' ' * lastLinePrinted.length()
       out.print '\b' * lastLinePrinted.length()
