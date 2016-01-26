@@ -2,9 +2,9 @@ import strutils, times, math
 
 type Progress* = ref object of RootObj
   sout: File
-  lastStep, maxSteps: int
+  lastStep, width, maxSteps: int
   startTime: float
-  lastLinePrinted, lastInfo: string
+  lastInfo: string
   maxValue: BiggestInt
 
 proc getMax*(pd: Progress): BiggestInt =
@@ -17,9 +17,9 @@ proc newProgress*(sout: File, maxValue: BiggestInt): Progress =
   return Progress(sout: sout,
     startTime: cpuTime(),
     lastStep: 0,
-    lastLinePrinted: "",
     maxValue: maxValue,
-    maxSteps: 30)
+    width: 79,
+    maxSteps: 35)
 
 proc updateProgress*(pd: Progress, newValue: BiggestInt, info: string): void =
 
@@ -40,29 +40,29 @@ proc updateProgress*(pd: Progress, newValue: BiggestInt, info: string): void =
   if displayedInfo.len < 16:
     displayedInfo = displayedInfo & ' '.repeat(16 - displayedInfo.len)
 
-  pd.sout.write('\b'.repeat(pd.lastLinePrinted.len))
+  pd.sout.write('\b'.repeat(pd.width))
 
-  pd.lastLinePrinted =
+  var line =
     '='.repeat(displayedSteps) & (if curStep > 0: "0" else: "") &
     '-'.repeat(pd.maxSteps - curStep) & " " &
     displayedInfo & " -- (" &
     (curPercent * 100).formatFloat(ffDecimal, 2) & "%" 
 
   if curPercent > 0.05:
-    pd.lastLinePrinted &= ", "
+    line &= ", "
     if remTime > 60:
-      pd.lastLinePrinted &= $floor(remTime / 60).int & "m "
-    pd.lastLinePrinted &= $ceil(remTime mod 60) & "s"
+      line &= $floor(remTime / 60).int & "m "
+    line &= $ceil(remTime mod 60) & "s"
 
-  pd.lastLinePrinted &= ")"
+  line &= ")"
+  line &= spaces(max(pd.width - line.len, 0))
 
-  pd.sout.write(pd.lastLinePrinted)
+  pd.sout.write(line)
   pd.lastStep = curStep
 
   pd.sout.flushFile
 
 proc erase*(pd: Progress): void =
-  pd.sout.write('\b'.repeat(pd.lastLinePrinted.len))
-  pd.sout.write(' '.repeat(pd.lastLinePrinted.len))
-  pd.sout.write('\b'.repeat(pd.lastLinePrinted.len))
-  pd.lastLinePrinted = ""
+  pd.sout.write('\b'.repeat(pd.width))
+  pd.sout.write(' '.repeat(pd.width))
+  pd.sout.write('\b'.repeat(pd.width))

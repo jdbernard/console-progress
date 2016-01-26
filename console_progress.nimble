@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.1"
+version       = "1.2"
 author        = "Jonathan Bernard"
 description   = "Utility for writing dynamic progress bars to the console."
 license       = "BSD"

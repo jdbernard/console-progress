@@ -9,12 +9,12 @@ package com.jdbernard.util
  * @author Jonathan Bernard (jdbernard@gmail.com)
  */
 public class ConsoleProgressBar {
-  int MAX_STEP = 30
+  int WIDTH = 79
+  int MAX_STEP = 35
 
   long max = 10
   def out = System.out
   private int lastStepAmount = -1
-  private String lastLinePrinted = ""
   private String lastInfo = ""
   private long startTime
 
@@ -50,20 +50,17 @@ public class ConsoleProgressBar {
       if (info.length() > 16) info = info[0..<16]
       if (info.length() < 16) info = info.padRight(16)
 
-      out.print '\b' * lastLinePrinted.length()
-      lastLinePrinted = '=' * numEq + (curStep > 0 ? "0" : "") + '-' * (MAX_STEP - curStep)
-      lastLinePrinted += " ${info} -- (" +
+      out.print '\b' * WIDTH
+      def line = = '=' * numEq + (curStep > 0 ? "0" : "") + '-' * (MAX_STEP - curStep)
+      line += " ${info} -- (" +
         "${String.format('%5.2f', curPercent * 100)}%, ${remMin ? remMin + 'm ' : ''}${remSec}s)       "
-      out.print lastLinePrinted
+      out.print line.padRight(WIDTH)
       lastStepAmount = curStep;
     }
     out.flush()
   }
 
   public void erase() {
-      out.print '\b' * lastLinePrinted.length()
-      out.print ' ' * lastLinePrinted.length()
-      out.print '\b' * lastLinePrinted.length()
-      lastLinePrinted = ""
+      out.print ('\b' * WIDTH) + (' ' * WIDTH) + ('\b' * WIDTH)
   }
 }
