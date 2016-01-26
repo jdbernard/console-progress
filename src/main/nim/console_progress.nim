@@ -30,8 +30,8 @@ proc updateProgress*(pd: Progress, newValue: BiggestInt, info: string): void =
 
   if info == pd.lastInfo and curStep == pd.lastStep: return
 
-  let curTime = cpuTime()
-  let remTime = ((curTime / curPercent) - curTime) * 1000
+  let curDuration = cpuTime() - pd.startTime
+  let remTime = ((curDuration / curPercent) - curDuration)
   let displayedSteps = max(curStep - 1, 0)
 
   pd.lastInfo = info

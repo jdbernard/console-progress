@@ -2,7 +2,7 @@ apply plugin: "groovy"
 apply plugin: "maven"
 
 group = "com.jdbernard"
-version = "1.2"
+version = "1.2.1"
 
 repositories {
     mavenLocal()
